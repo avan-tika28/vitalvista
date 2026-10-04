@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VitalVista - Intelligent Healthcare Risk Assessment Platform</title>
+  <meta name="description" content="AI-powered health risk insights from clinical and lifestyle data for early detection of metabolic and cardiovascular health conditions.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Application Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Chart.js for Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- App Layout Structure -->
+  <div class="app-layout">
+
+    <!-- ===================================================================
+         LEFT SIDEBAR NAVIGATION (REAL SAAS APPLICATION NAVIGATION)
+         =================================================================== -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div>
+        <!-- Sidebar Brand Header -->
+        <div class="sidebar-header">
+          <a href="#" class="sidebar-logo" onclick="navigateToTab('dashboard')">
+            <img src="./assets/logo.jpg" alt="VitalVista Logo" class="sidebar-logo-icon">
+            <div class="sidebar-logo-text">
+              <div class="sidebar-brand-name">VITAL<span>VISTA</span></div>
+              <div class="sidebar-subtext">Intelligent Health Assessment</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Sidebar Navigation Menu -->
+        <nav class="sidebar-nav" id="sidebarNav">
+          <div class="nav-section-label">Core Operations</div>
+
+          <a href="#" class="sidebar-nav-item active" data-target="dashboard">
+            <span class="sidebar-nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="#" class="sidebar-nav-item" data-target="patients">
+            <span class="sidebar-nav-icon">👥</span>
+            <span>Patients</span>
+          </a>
+
+          <a href="#" class="sidebar-nav-item" data-target="predict">
+            <span class="sidebar-nav-icon">⚡</span>
+            <span>Risk Assessment</span>
+          </a>
+
+          <a href="#" class="sidebar-nav-item" data-target="history">
+            <span class="sidebar-nav-icon">📋</span>
+            <span>Assessments</span>
+          </a>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="nav-section-label">Data & Analytics</div>
+
+          <a href="#" class="sidebar-nav-item" data-target="analytics">
+            <span class="sidebar-nav-icon">📈</span>
+            <span>Health Analytics</span>
+          </a>
+
+          <a href="#" class="sidebar-nav-item" data-target="insights">
+            <span class="sidebar-nav-icon">🧬</span>
+            <span>Disease Insights</span>
+          </a>
+
+          <a href="#" class="sidebar-nav-item" data-target="data">
+            <span class="sidebar-nav-icon">📁</span>
+            <span>Data</span>
+          </a>
+
+          <a href="#" class="sidebar-nav-item" data-target="models">
+            <span class="sidebar-nav-icon">🧠</span>
+            <span>Model Intelligence</span>
+          </a>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="nav-section-label">System</div>
+
+          <a href="#" class="sidebar-nav-item" data-target="settings">
+            <span class="sidebar-nav-icon">⚙️</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Sidebar User Profile Footer -->
+      <div class="sidebar-footer">
+        <div class="user-avatar">AV</div>
+        <div class="user-info">
+          <div class="user-name">Dr. Alex Vance</div>
+          <div class="user-role">Clinical Director</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===================================================================
+         MAIN WORKSPACE AREA
+         =================================================================== -->
+    <div class="main-workspace">
+
+      <!-- TOP HEADER BAR -->
+      <header class="top-header-bar">
+        <div class="top-header-left">
+          <button class="mobile-sidebar-toggle" id="sidebarToggle" aria-label="Toggle Navigation">☰</button>
+          <div class="header-greeting-group">
+            <div class="header-greeting-title" id="headerTitle">Good morning</div>
+            <div class="header-greeting-sub" id="headerSubtitle">Healthcare Intelligence Dashboard</div>
+          </div>
+        </div>
+
+        <div class="top-header-right">
+          <!-- Search Box -->
+          <div class="header-search-box">
+            <span class="header-search-icon">🔍</span>
+            <input type="text" class="header-search-input" id="globalSearchInput" placeholder="Search clinical records...">
+          </div>
+
+          <!-- Notification Bell -->
+          <button class="header-icon-btn" aria-label="Notifications">
+            🔔
+            <span class="header-badge-dot"></span>
+          </button>
+
+          <!-- Primary CTA Button -->
+          <button class="btn btn-main" onclick="navigateToTab('predict')">
+            + New Risk Assessment
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY -->
+      <div class="content-body">
+
+        <!-- ===============================================================
+             WORKSPACE 1: DASHBOARD
+             =============================================================== -->
+        <section id="dashboard" class="page-section active">
+          
+          <!-- Summary Cards (Real Numbers Only) -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-box" style="background: rgba(37, 99, 235, 0.1); color: var(--accent-blue);">👥</div>
+              <div class="kpi-content">
+                <div class="kpi-value" id="kpiPatientCount">0</div>
+                <div class="kpi-label">Registered Patients</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box" style="background: rgba(13, 148, 136, 0.1); color: var(--accent-teal);">📋</div>
+              <div class="kpi-content">
+                <div class="kpi-value" id="kpiTotalAssessments">0</div>
+                <div class="kpi-label">Total Assessments</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan);">🧠</div>
+              <div class="kpi-content">
+                <div class="kpi-value">4 Estimators</div>
+                <div class="kpi-label">Active ML Models</div>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-box" style="background: rgba(16, 185, 129, 0.1); color: var(--risk-low);">📁</div>
+              <div class="kpi-content">
+                <div class="kpi-value">4 Repositories</div>
+                <div class="kpi-label">Integrated Datasets</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Assessments Table -->
+          <div style="margin-bottom: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--primary);">RECENT ASSESSMENTS</h3>
+              <button class="btn btn-secondary" onclick="navigateToTab('history')" style="padding: 4px 12px; font-size: 0.8rem;">View All History ➔</button>
+            </div>
+
+            <div id="recentAssessmentsContainer">
+              <!-- Rendered dynamically by app.js or empty state -->
+              <div class="empty-state-card">
+                <div class="empty-state-icon">📋</div>
+                <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 6px;">No assessments yet</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Run your first patient risk assessment to build clinical history.</p>
+                <button class="btn btn-main" onclick="navigateToTab('predict')">Start Risk Assessment ⚡</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Overview Interactive Chart -->
+          <div class="chart-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--primary);">RISK OVERVIEW TRENDS</h3>
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">Stored Assessment History</span>
+            </div>
+            <div id="riskTrendContainer" class="chart-wrapper">
+              <div class="empty-state-message" style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.88rem;">
+                Risk trends will appear after assessments are completed.
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 2: PATIENTS MANAGEMENT
+             =============================================================== -->
+        <section id="patients" class="page-section">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+            <div>
+              <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;">PATIENTS MANAGEMENT</h1>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Manage patient profiles, register clinical records, and access risk assessment history.</p>
+            </div>
+
+            <button class="btn btn-main" onclick="openAddPatientModal()" style="font-size: 0.9rem; padding: 10px 18px;">+ Register Patient</button>
+          </div>
+
+          <!-- Filters & Search Bar -->
+          <div class="glass-card" style="margin-bottom: 20px; padding: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; align-items: center;">
+              
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="patientSearchInput" style="font-size: 0.78rem;">Search Patient:</label>
+                <input type="text" id="patientSearchInput" class="form-control" placeholder="Search ID or Name..." style="font-size: 0.85rem;">
+              </div>
+
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="filterPatientRisk" style="font-size: 0.78rem;">Filter Risk Status:</label>
+                <select id="filterPatientRisk" class="form-control" style="font-size: 0.85rem;">
+                  <option value="all" selected>All Risk Statuses</option>
+                  <option value="HIGH RISK">Elevated / High Risk</option>
+                  <option value="MODERATE RISK">Moderate Risk</option>
+                  <option value="LOW RISK">Low Risk</option>
+                </select>
+              </div>
+
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="sortPatientsOrder" style="font-size: 0.78rem;">Sort Order:</label>
+                <select id="sortPatientsOrder" class="form-control" style="font-size: 0.85rem;">
+                  <option value="newest" selected>Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="name">Patient Name (A-Z)</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div id="patientsListContainer">
+            <!-- Rendered dynamically by app.js -->
+            <div class="empty-state-card">
+              <div class="empty-state-icon">👥</div>
+              <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 6px;">No patients registered</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Register a patient profile to begin managing longitudinal clinical records.</p>
+              <button class="btn btn-main" onclick="openAddPatientModal()">+ Register Patient</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 3: RISK ASSESSMENT (PRIMARY FEATURE WORKFLOW)
+             =============================================================== -->
+        <section id="predict" class="page-section">
+          
+          <!-- TOP WORKSPACE HEADER BAR -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+            <div>
+              <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px;">PATIENT RISK ASSESSMENT</h1>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Enter clinical and lifestyle information to generate a machine-learning risk assessment.</p>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px; background: #ffffff; padding: 10px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Assessment ID</div>
+                <div style="font-size: 0.95rem; font-weight: 800; color: var(--accent-teal);" id="topAssessmentIdPreview">Auto-generated</div>
+              </div>
+              <div style="width: 1px; height: 26px; background: var(--border-color);"></div>
+              <div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Status</div>
+                <div style="font-size: 0.85rem; font-weight: 800; color: var(--risk-low); display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--risk-low); display: inline-block;"></span> Ready
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DISEASE SELECTION (SELECT ASSESSMENT TYPE) -->
+          <div style="margin-bottom: 28px;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">ASSESSMENT TYPE</div>
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 14px;">SELECT ASSESSMENT TYPE</h2>
+
+            <div class="disease-selector-grid">
+              <!-- Diabetes Card -->
+              <div class="disease-card-select active" id="card-diabetes" onclick="selectDiseaseAndAssess('diabetes')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">🩸</span>
+                  <span class="status-tag normal">MODEL ACTIVE</span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 4px;">Diabetes Risk</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Type 2 Diabetes Mellitus risk evaluation based on fasting glucose, HbA1c, and BMI parameters.</p>
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-teal);">UCI Diabetes Dataset (767 Records)</div>
+                <button class="btn btn-secondary card-select-btn" style="width: 100%; margin-top: 12px; font-size: 0.8rem;">Select Assessment ➔</button>
+              </div>
+
+              <!-- Heart Disease Card -->
+              <div class="disease-card-select" id="card-heart" onclick="selectDiseaseAndAssess('heart')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">🫀</span>
+                  <span class="status-tag normal">MODEL ACTIVE</span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 4px;">Heart Disease Risk</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Cardiovascular stenosis and ischemic risk evaluation from blood pressure, cholesterol, and heart rate.</p>
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-teal);">UCI Cleveland Heart Dataset (296 Records)</div>
+                <button class="btn btn-secondary card-select-btn" style="width: 100%; margin-top: 12px; font-size: 0.8rem;">Select Assessment ➔</button>
+              </div>
+
+              <!-- Hypertension Card -->
+              <div class="disease-card-select" id="card-hypertension" onclick="selectDiseaseAndAssess('hypertension')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">🩺</span>
+                  <span class="status-tag normal">MODEL ACTIVE</span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 4px;">Hypertension Risk</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Vascular hypertension risk evaluation from blood pressure, BMI, and lifestyle factors.</p>
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-teal);">US Medical Dataset (1,338 Records)</div>
+                <button class="btn btn-secondary card-select-btn" style="width: 100%; margin-top: 12px; font-size: 0.8rem;">Select Assessment ➔</button>
+              </div>
+
+              <!-- Obesity Card -->
+              <div class="disease-card-select" id="card-obesity" onclick="selectDiseaseAndAssess('obesity')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">⚖️</span>
+                  <span class="status-tag normal">MODEL ACTIVE</span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 4px;">Obesity Risk</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Body fat accumulation tier classifier based on height, weight, activity, and caloric indicators.</p>
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--accent-teal);">UCI Biometric Dataset (2,111 Records)</div>
+                <button class="btn btn-secondary card-select-btn" style="width: 100%; margin-top: 12px; font-size: 0.8rem;">Select Assessment ➔</button>
+              </div>
+
+              <!-- Unavailable Disabled Card Example -->
+              <div class="disease-card-select disabled">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">🧠</span>
+                  <span class="status-tag" style="background: #e2e8f0; color: #64748b;">UNAVAILABLE</span>
+                </div>
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--text-muted); margin-bottom: 4px;">Stroke Risk</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Cerebrovascular risk pipeline undergoing validation on prospective cohort data.</p>
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">Pipeline In Validation</div>
+                <button class="btn btn-secondary" disabled style="width: 100%; margin-top: 12px; font-size: 0.8rem; opacity: 0.5;">Model Unavailable</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLINICAL ASSESSMENT FORM & RESULT PANEL WORKSPACE -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;">
+            
+            <!-- FORM CONTAINER -->
+            <div class="glass-card">
+              <div style="font-size: 0.75rem; font-weight: 800; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">CLINICAL FORM</div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 16px;">ENTER PATIENT CLINICAL DATA</h3>
+
+              <!-- Presets Bar -->
+              <div style="background: rgba(15, 23, 42, 0.03); padding: 12px; border-radius: 8px; margin-bottom: 18px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">⚡ Sample Clinical Profiles:</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <button class="btn btn-secondary" onclick="loadPreset('healthy')" style="padding: 4px 10px; font-size: 0.75rem;">🟢 Baseline</button>
+                  <button class="btn btn-secondary" onclick="loadPreset('prediabetic')" style="padding: 4px 10px; font-size: 0.75rem;">🟡 Pre-Diabetic</button>
+                  <button class="btn btn-secondary" onclick="loadPreset('highMetabolic')" style="padding: 4px 10px; font-size: 0.75rem;">🔴 Metabolic Risk</button>
+                  <button class="btn btn-secondary" onclick="loadPreset('cardiacRisk')" style="padding: 4px 10px; font-size: 0.75rem;">🔵 Cardiac Risk</button>
+                </div>
+              </div>
+
+              <form id="predictForm">
+                
+                <!-- PATIENT SELECTOR LINK -->
+                <div class="input-field-group" style="margin-bottom: 14px;">
+                  <label class="input-label" for="patientSelectorSelect">Associated Patient Profile:</label>
+                  <select id="patientSelectorSelect" class="form-control" style="font-weight: 700;">
+                    <option value="" selected>-- Anonymous / New Patient Assessment --</option>
+                  </select>
+                </div>
+
+                <!-- Target & Algorithm Selectors -->
+                <div class="form-grid-2">
+                  <div class="input-field-group">
+                    <label class="input-label" for="diseaseTargetSelect">Assessment Target:</label>
+                    <select id="diseaseTargetSelect" class="form-control" style="font-weight: 700;">
+                      <option value="all" selected>Multi-Disease Risk Profile</option>
+                      <option value="diabetes">Diabetes Risk</option>
+                      <option value="heart">Heart Disease Risk</option>
+                      <option value="hypertension">Hypertension Risk</option>
+                      <option value="obesity">Obesity Risk</option>
+                    </select>
+                  </div>
+
+                  <div class="input-field-group">
+                    <label class="input-label" for="algorithmSelect">ML Estimator Model:</label>
+                    <select id="algorithmSelect" class="form-control" style="font-weight: 700;">
+                      <option value="Random Forest" selected>Random Forest Classifier</option>
+                      <option value="SVM">Support Vector Machine (RBF)</option>
+                      <option value="Decision Tree">Decision Tree Classifier</option>
+                      <option value="Logistic Regression">Logistic Regression</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- SECTION: PATIENT PROFILE -->
+                <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary); margin: 16px 0 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>PATIENT PROFILE</span>
+                  <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent-teal);">Core Demographics</span>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,heart,hypertension,obesity,all">
+                    <label class="input-label" for="ageInput">Age <span class="unit-tag">years</span>: <span class="input-val-preview" id="ageInputVal">45</span></label>
+                    <input type="range" id="ageInput" min="18" max="95" value="45" class="range-slider">
+                  </div>
+
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,heart,hypertension,obesity,all">
+                    <label class="input-label" for="genderSelect">Sex / Gender:</label>
+                    <select id="genderSelect" class="form-control">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,hypertension,obesity,all">
+                    <label class="input-label" for="heightInput">Height <span class="unit-tag">cm</span>: <span class="input-val-preview" id="heightInputVal">172</span></label>
+                    <input type="range" id="heightInput" min="140" max="210" value="172" class="range-slider">
+                  </div>
+
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,hypertension,obesity,all">
+                    <label class="input-label" for="weightInput">Weight <span class="unit-tag">kg</span>: <span class="input-val-preview" id="weightInputVal">78</span></label>
+                    <input type="range" id="weightInput" min="40" max="160" value="78" class="range-slider">
+                  </div>
+                </div>
+
+                <div class="form-field-wrapper" data-field-disease="diabetes,hypertension,obesity,all" style="background: rgba(13, 148, 136, 0.06); padding: 8px 12px; border-radius: 6px; margin-bottom: 14px; font-size: 0.82rem; font-weight: 700; color: var(--accent-teal);">
+                  Computed Body Mass Index (BMI): <span id="bmiDisplay">26.4</span> <span class="unit-tag">kg/m²</span> (<span id="bmiCategory">Overweight</span>)
+                </div>
+
+                <!-- SECTION: CLINICAL INFORMATION -->
+                <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary); margin: 16px 0 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>CLINICAL INFORMATION</span>
+                  <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent-teal);">Model Biomarkers</span>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="input-field-group form-field-wrapper" data-field-disease="heart,hypertension,all">
+                    <label class="input-label" for="sysInput">Systolic BP <span class="unit-tag">mmHg</span>: <span class="input-val-preview" id="sysInputVal">128</span></label>
+                    <input type="range" id="sysInput" min="90" max="210" value="128" class="range-slider">
+                  </div>
+
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,hypertension,all">
+                    <label class="input-label" for="diaInput">Diastolic BP <span class="unit-tag">mmHg</span>: <span class="input-val-preview" id="diaInputVal">82</span></label>
+                    <input type="range" id="diaInput" min="50" max="130" value="82" class="range-slider">
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,heart,all">
+                    <label class="input-label" for="glucoseInput">Fasting Glucose <span class="unit-tag">mg/dL</span>: <span class="input-val-preview" id="glucoseInputVal">105</span></label>
+                    <input type="range" id="glucoseInput" min="60" max="280" value="105" class="range-slider">
+                  </div>
+
+                  <div class="input-field-group form-field-wrapper" data-field-disease="diabetes,all">
+                    <label class="input-label" for="hba1cInput">Glycated HbA1c <span class="unit-tag">%</span>: <span class="input-val-preview" id="hba1cInputVal">5.7</span></label>
+                    <input type="range" id="hba1cInput" min="4.0" max="14.0" step="0.1" value="5.7" class="range-slider">
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="input-field-group form-field-wrapper" data-field-disease="heart,all">
+                    <label class="input-label" for="cholInput">Total Cholesterol <span class="unit-tag">mg/dL</span>: <span class="input-val-preview" id="cholInputVal">210</span></label>
+                    <input type="range" id="cholInput" min="110" max="380" value="210" class="range-slider">
+                  </div>
+
+                  <div class="input-field-group form-field-wrapper" data-field-disease="heart,all">
+                    <label class="input-label" for="hrInput">Resting Heart Rate <span class="unit-tag">bpm</span>: <span class="input-val-preview" id="hrInputVal">74</span></label>
+                    <input type="range" id="hrInput" min="45" max="130" value="74" class="range-slider">
+                  </div>
+                </div>
+
+                <!-- SECTION: LIFESTYLE INFORMATION -->
+                <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary); margin: 16px 0 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>LIFESTYLE INFORMATION</span>
+                  <span style="font-size: 0.7rem; font-weight: 700; color: var(--accent-teal);">Behavioral Variables</span>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="input-field-group form-field-wrapper" data-field-disease="obesity,all">
+                    <label class="input-label" for="actInput">Physical Activity <span class="unit-tag">hrs/wk</span>: <span class="input-val-preview" id="actInputVal">3</span></label>
+                    <input type="range" id="actInput" min="0" max="20" value="3" class="range-slider">
+                  </div>
+
+                  <div class="input-field-group form-field-wrapper" data-field-disease="heart,hypertension,obesity,all">
+                    <label class="input-label" for="smokeSelect">Smoking Habits:</label>
+                    <select id="smokeSelect" class="form-control">
+                      <option value="Never">Never Smoked</option>
+                      <option value="Former">Former Smoker</option>
+                      <option value="Active">Active Smoker</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- PRE-SUBMISSION ASSESSMENT SUMMARY -->
+                <div style="background: rgba(15, 23, 42, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 14px; margin: 18px 0;">
+                  <div style="font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">ASSESSMENT SUMMARY</div>
+                  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 0.82rem;">
+                    <div><span style="color: var(--text-muted);">Assessment Type:</span> <strong id="sumTargetLabel">Multi-Disease Risk Profile</strong></div>
+                    <div><span style="color: var(--text-muted);">Clinical Inputs:</span> <strong id="sumClinicalCount">6 parameters</strong></div>
+                    <div><span style="color: var(--text-muted);">Lifestyle Inputs:</span> <strong id="sumLifestyleCount">2 parameters</strong></div>
+                    <div><span style="color: var(--text-muted);">Model:</span> <strong id="sumModelLabel">Random Forest Classifier</strong></div>
+                  </div>
+                </div>
+
+                <!-- FORM VALIDATION FEEDBACK -->
+                <div id="validationFeedback" style="display: none; background: #fee2e2; border-left: 3px solid #ef4444; color: #b91c1c; padding: 8px 12px; font-size: 0.8rem; margin-bottom: 14px; border-radius: 4px;"></div>
+
+                <!-- PRIMARY & SECONDARY ACTIONS -->
+                <div style="display: flex; gap: 12px;">
+                  <button type="submit" class="btn btn-main" id="btnSubmitPredict" style="flex: 2; padding: 12px; font-size: 0.95rem;">
+                    ANALYZE HEALTH RISK
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="clearAssessmentForm()" style="flex: 1; padding: 12px; font-size: 0.88rem;">
+                    CLEAR FORM
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- RESULT SCREEN CONTAINER -->
+            <div id="resultCardContainer">
+              <div class="glass-card" style="text-align: center; padding: 48px 24px;">
+                <div style="font-size: 2.8rem; margin-bottom: 10px;">🩺</div>
+                <h3 style="font-size: 1.15rem; color: var(--primary); margin-bottom: 6px;">Assessment Pending</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Select an assessment type, configure patient parameters, and click <strong>"ANALYZE HEALTH RISK"</strong> to compute real-time machine learning prediction.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 4: ASSESSMENTS HISTORY (#history)
+             =============================================================== -->
+        <section id="history" class="page-section">
+          <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">ASSESSMENT HISTORY</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Search, filter, and inspect persisted risk assessment records from SQLite.</p>
+          </div>
+
+          <!-- Filters Bar -->
+          <div class="glass-card" style="margin-bottom: 20px; padding: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; align-items: center;">
+              
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="searchAssessmentId" style="font-size: 0.78rem;">Search Assessment ID:</label>
+                <input type="text" id="searchAssessmentId" class="form-control" placeholder="e.g. VV-001..." style="font-size: 0.85rem;">
+              </div>
+
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="filterDisease" style="font-size: 0.78rem;">Filter Condition:</label>
+                <select id="filterDisease" class="form-control" style="font-size: 0.85rem;">
+                  <option value="all" selected>All Conditions</option>
+                  <option value="diabetes">Diabetes</option>
+                  <option value="heart">Heart Disease</option>
+                  <option value="hypertension">Hypertension</option>
+                  <option value="obesity">Obesity</option>
+                </select>
+              </div>
+
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="filterRiskLevel" style="font-size: 0.78rem;">Filter Risk Level:</label>
+                <select id="filterRiskLevel" class="form-control" style="font-size: 0.85rem;">
+                  <option value="all" selected>All Risk Tiers</option>
+                  <option value="LOW RISK">Low Risk</option>
+                  <option value="MODERATE RISK">Moderate Risk</option>
+                  <option value="HIGH RISK">High Risk</option>
+                </select>
+              </div>
+
+              <div class="input-field-group" style="margin-bottom: 0;">
+                <label class="input-label" for="sortOrder" style="font-size: 0.78rem;">Sort Order:</label>
+                <select id="sortOrder" class="form-control" style="font-size: 0.85rem;">
+                  <option value="newest" selected>Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <div id="assessmentHistoryContainer">
+            <!-- Rendered dynamically by app.js or empty state -->
+            <div class="empty-state-card">
+              <div class="empty-state-icon">📋</div>
+              <h3 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 6px;">No assessments yet</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Run your first patient risk assessment to begin building assessment history.</p>
+              <button class="btn btn-main" onclick="navigateToTab('predict')">Start Risk Assessment ⚡</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 5: HEALTH ANALYTICS (#analytics)
+             =============================================================== -->
+        <section id="analytics" class="page-section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">HEALTH ANALYTICS</h2>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Explore patterns and distributions across the healthcare datasets powering VitalVista.</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <label for="analyticsDatasetSelect" style="font-size: 0.85rem; font-weight: 800;">DATASET:</label>
+              <select id="analyticsDatasetSelect" class="form-control" style="max-width: 280px; font-weight: 700;">
+                <option value="diabetes" selected>Diabetes (UCI Pima Indians)</option>
+                <option value="heart">Heart Disease (UCI Cleveland)</option>
+                <option value="hypertension">Hypertension (US Clinical Dataset)</option>
+                <option value="obesity">Obesity (UCI Biometric Dataset)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Cards Grid -->
+          <div class="kpi-grid" id="analyticsOverviewGrid">
+            <div class="kpi-card">
+              <div class="kpi-content">
+                <div class="kpi-value" id="anRecords">-</div>
+                <div class="kpi-label">Records</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-content">
+                <div class="kpi-value" id="anFeatures">-</div>
+                <div class="kpi-label">Features</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-content">
+                <div class="kpi-value" id="anTarget" style="font-size: 1.1rem; color: var(--accent-blue);">-</div>
+                <div class="kpi-label">Target Variable</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-content">
+                <div class="kpi-value" id="anMissing" style="color: var(--risk-low);">-</div>
+                <div class="kpi-label">Missing Values</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="eda-charts-grid" style="margin-bottom: 24px;">
+            <div class="chart-card">
+              <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px;">📊 Target Class Distribution</h4>
+              <div class="chart-wrapper"><canvas id="analyticsTargetChart"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+              <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px;">📈 Age / BMI Distribution</h4>
+              <div class="chart-wrapper"><canvas id="analyticsAgeChart"></canvas></div>
+            </div>
+          </div>
+
+          <!-- Feature Correlation Matrix -->
+          <div class="chart-card" style="margin-bottom: 24px;">
+            <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px;">🔗 FEATURE CORRELATION MATRIX</h4>
+            <div id="analyticsCorrelationContainer" style="overflow-x: auto;"></div>
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 6: DISEASE INSIGHTS (#insights)
+             =============================================================== -->
+        <section id="insights" class="page-section">
+          <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">DISEASE INSIGHTS</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Active clinical disease risk assessment modules and dataset parameters.</p>
+          </div>
+
+          <div class="disease-selector-grid">
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary);">🩸 Diabetes</h3>
+                <span class="status-tag normal">MODEL ACTIVE</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Metabolic disorder characterized by chronic insulin resistance.</p>
+              <div style="font-size: 0.78rem; color: var(--primary); margin-bottom: 14px;">
+                <strong>Relevant Parameters:</strong> Fasting Glucose, HbA1c, BMI, Age, Pedigree Function
+              </div>
+              <button class="btn btn-main" onclick="selectDiseaseAndAssess('diabetes')" style="width: 100%;">Assess Diabetes Risk ⚡</button>
+            </div>
+
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary);">🫀 Heart Disease</h3>
+                <span class="status-tag normal">MODEL ACTIVE</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Arterial stenosis and myocardial ischemia evaluation.</p>
+              <div style="font-size: 0.78rem; color: var(--primary); margin-bottom: 14px;">
+                <strong>Relevant Parameters:</strong> Resting BP, Cholesterol, Max Heart Rate, ST Depression
+              </div>
+              <button class="btn btn-main" onclick="selectDiseaseAndAssess('heart')" style="width: 100%;">Assess Cardiac Risk ⚡</button>
+            </div>
+
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary);">🩺 Hypertension</h3>
+                <span class="status-tag normal">MODEL ACTIVE</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Persistent arterial blood pressure elevation causing vascular stress.</p>
+              <div style="font-size: 0.78rem; color: var(--primary); margin-bottom: 14px;">
+                <strong>Relevant Parameters:</strong> Systolic BP, Diastolic BP, BMI, Smoking Status
+              </div>
+              <button class="btn btn-main" onclick="selectDiseaseAndAssess('hypertension')" style="width: 100%;">Assess Vascular Risk ⚡</button>
+            </div>
+
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary);">⚖️ Obesity</h3>
+                <span class="status-tag normal">MODEL ACTIVE</span>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">Multi-class classification of body fat accumulation tiers.</p>
+              <div style="font-size: 0.78rem; color: var(--primary); margin-bottom: 14px;">
+                <strong>Relevant Parameters:</strong> Height, Weight, Caloric Intake, Physical Activity
+              </div>
+              <button class="btn btn-main" onclick="selectDiseaseAndAssess('obesity')" style="width: 100%;">Assess Obesity Risk ⚡</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 7: MODEL INTELLIGENCE (#models)
+             =============================================================== -->
+        <section id="models" class="page-section">
+          <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">MODEL INTELLIGENCE</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Secondary technical section displaying holdout test-set performance metrics.</p>
+          </div>
+
+          <div style="margin-bottom: 18px; display: flex; align-items: center; gap: 12px;">
+            <label for="metricsDiseaseSelect" style="font-weight: 700; font-size: 0.88rem;">Target Pipeline:</label>
+            <select id="metricsDiseaseSelect" class="form-control" style="max-width: 280px; font-weight: 700;">
+              <option value="heart" selected>Coronary Heart Disease Pipeline</option>
+              <option value="diabetes">Type 2 Diabetes Pipeline</option>
+              <option value="hypertension">Hypertension & Vascular Pipeline</option>
+              <option value="obesity">Obesity Tiers Classifier Pipeline</option>
+            </select>
+          </div>
+
+          <div id="metricsContainer">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 8: DATA (#data)
+             =============================================================== -->
+        <section id="data" class="page-section">
+          <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">INTEGRATED HEALTHCARE DATASETS</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Real public clinical repositories integrated into the ML pipeline.</p>
+          </div>
+
+          <div id="datasetCardsContainer" class="disease-selector-grid">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </section>
+
+        <!-- ===============================================================
+             WORKSPACE 9: SETTINGS (#settings)
+             =============================================================== -->
+        <section id="settings" class="page-section">
+          <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">SYSTEM SETTINGS</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Application configuration and database persistence status.</p>
+          </div>
+
+          <div class="glass-card" style="max-width: 600px;">
+            <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 14px; color: var(--primary);">System Diagnostic Information</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                <span style="color: var(--text-muted);">Persistence Engine:</span>
+                <strong>SQLite Database (`vitalvista_assessments.db`)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                <span style="color: var(--text-muted);">ML Backend URL:</span>
+                <strong>`http://127.0.0.1:5000/api`</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                <span style="color: var(--text-muted);">Scikit-Learn Status:</span>
+                <strong style="color: var(--risk-low);">Active (4 Pipelines Trained)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 8px;">
+                <span style="color: var(--text-muted);">Platform Version:</span>
+                <strong>VitalVista Enterprise v2.4</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- APP FOOTER -->
+      <footer class="app-footer" style="padding: 16px 24px; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 40px; display: flex; flex-direction: column; gap: 4px; border-radius: var(--radius-sm); background: #ffffff;">
+        <div style="font-weight: 700; color: var(--primary);">VITALVISTA — Healthcare Intelligence Platform</div>
+        <div>Risk assessments are generated using machine-learning models and should be interpreted in appropriate clinical context. They do not constitute a medical diagnosis.</div>
+      </footer>
+
+    </div>
+
+  </div>
+
+  <!-- ASSESSMENT DETAILS MODAL OVERLAY -->
+  <div id="assessmentDetailsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #ffffff; border-radius: var(--radius-md); max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); position: relative;">
+      <button onclick="closeAssessmentDetailsModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      <div id="modalDetailsContent"></div>
+    </div>
+  </div>
+
+  <!-- EXPORT CLINICAL REPORT MODAL OVERLAY -->
+  <div id="exportReportModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 2100; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #ffffff; border-radius: var(--radius-md); max-width: 740px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 28px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); position: relative;">
+      <button onclick="closeExportReportModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      <div id="exportReportContent"></div>
+    </div>
+  </div>
+
+  <!-- REGISTER PATIENT MODAL OVERLAY -->
+  <div id="addPatientModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 2200; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #ffffff; border-radius: var(--radius-md); max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 26px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); position: relative;">
+      <button onclick="closeAddPatientModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      
+      <div style="margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <span style="font-size: 0.75rem; font-weight: 800; color: var(--accent-teal); text-transform: uppercase;">PATIENT REGISTRATION</span>
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-top: 2px;">Register Patient Profile</h2>
+      </div>
+
+      <form id="addPatientForm">
+        <div class="input-field-group">
+          <label class="input-label" for="regPatientName">Full Patient Name *:</label>
+          <input type="text" id="regPatientName" class="form-control" placeholder="e.g. Eleanor Vance" required style="font-size: 0.9rem;">
+        </div>
+
+        <div class="form-grid-2">
+          <div class="input-field-group">
+            <label class="input-label" for="regPatientAge">Age (Years) *:</label>
+            <input type="number" id="regPatientAge" class="form-control" min="1" max="115" value="45" required>
+          </div>
+
+          <div class="input-field-group">
+            <label class="input-label" for="regPatientGender">Sex / Gender *:</label>
+            <select id="regPatientGender" class="form-control" required>
+              <option value="Male">Male</option>
+              <option value="Female" selected>Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-field-group">
+          <label class="input-label" for="regPatientId">Patient ID (Auto/Custom):</label>
+          <input type="text" id="regPatientId" class="form-control" placeholder="Auto-generated (e.g. PAT-001)" style="font-size: 0.88rem; font-weight: 700; color: var(--accent-teal);">
+        </div>
+
+        <div class="input-field-group">
+          <label class="input-label" for="regPatientContact">Contact Info (Phone/Email - Optional):</label>
+          <input type="text" id="regPatientContact" class="form-control" placeholder="e.g. +1 555-0192 or patient@email.com">
+        </div>
+
+        <div class="input-field-group">
+          <label class="input-label" for="regPatientNotes">Clinical Notes / History (Optional):</label>
+          <textarea id="regPatientNotes" class="form-control" rows="2" placeholder="e.g. Family history of Type 2 Diabetes..."></textarea>
+        </div>
+
+        <div id="patientRegFeedback" style="display: none; background: #fee2e2; border-left: 3px solid #ef4444; color: #b91c1c; padding: 8px 12px; font-size: 0.8rem; margin-bottom: 14px; border-radius: 4px;"></div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeAddPatientModal()">Cancel</button>
+          <button type="submit" class="btn btn-main" id="btnSubmitAddPatient">REGISTER PATIENT</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PATIENT PROFILE MODAL OVERLAY -->
+  <div id="patientProfileModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 2300; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #ffffff; border-radius: var(--radius-md); max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 28px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); position: relative;">
+      <button onclick="closePatientProfileModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      <div id="patientProfileContent"></div>
+    </div>
+  </div>
+
+  <!-- Main Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
